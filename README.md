@@ -7,6 +7,7 @@ ReturnIt - City-Wide Lost & Found Platform
 
 ### Project Members
 Md Abrar Mahbub Fida - 2321355042
+Rizwan Arif - 2312237042
 
 ## Project Description
 
