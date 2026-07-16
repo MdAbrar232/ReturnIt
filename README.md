@@ -3,7 +3,7 @@
 ## CSE327 - Software Engineering
 
 ### Project Title
-ReturnIt - City-Wide Lost & Found Platform
+ReturnIt - University Lost & Found Platform
 
 ### Project Members
 Md Abrar Mahbub Fida - 2321355042  
@@ -11,7 +11,7 @@ Rizwan Arif - 2312237042
 
 ## Project Description
 
-ReturnIt is a web-based Lost & Found platform designed to help people report, search, and recover lost belongings across an entire city. Unlike traditional lost-and-found systems that operate within a single organization, ReturnIt provides a centralized platform where users can post lost or found items, upload images, search reports, and submit ownership claims.
+ReturnIt is a web-based Lost & Found platform designed to help people report, search, and recover lost belongings across the University Campus. ReturnIt provides a centralized platform where users can post lost or found items, upload images, search reports, and submit ownership claims.
 
 ## Technology Stack
 
