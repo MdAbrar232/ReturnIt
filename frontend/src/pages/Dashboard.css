@@ -1,0 +1,29 @@
+.dashboard {
+  min-height: 100vh;
+  padding: 60px;
+  background: #f5f7fb;
+}
+
+.dashboard h1 {
+  margin-bottom: 10px;
+}
+
+.dashboard p {
+  color: #555;
+  margin-bottom: 40px;
+}
+
+.dashboard-actions {
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+}
+
+.dashboard-actions button {
+  padding: 14px 22px;
+  border: none;
+  border-radius: 6px;
+  background: #111827;
+  color: white;
+  cursor: pointer;
+}

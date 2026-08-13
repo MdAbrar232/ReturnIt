@@ -1,0 +1,70 @@
+.report-page {
+  min-height: 100vh;
+  padding: 50px 20px;
+  background: #f5f7fb;
+}
+
+.report-card {
+  width: 600px;
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 40px;
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+}
+
+.report-card h1 {
+  margin: 0 0 8px;
+  text-align: center;
+}
+
+.report-subtitle {
+  margin-bottom: 30px;
+  text-align: center;
+  color: #666;
+}
+
+.report-card form {
+  display: flex;
+  flex-direction: column;
+}
+
+.report-card label {
+  margin-bottom: 6px;
+  font-weight: bold;
+}
+
+.report-card input,
+.report-card textarea,
+.report-card select {
+  padding: 11px;
+  margin-bottom: 20px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 15px;
+  font-family: inherit;
+}
+
+.report-card textarea {
+  min-height: 100px;
+  resize: vertical;
+}
+
+.report-card button {
+  padding: 13px;
+  border: none;
+  border-radius: 6px;
+  background: #111827;
+  color: white;
+  font-size: 15px;
+  cursor: pointer;
+}
+
+.report-error {
+  color: #dc2626;
+}
+
+.report-success {
+  color: #16a34a;
+}

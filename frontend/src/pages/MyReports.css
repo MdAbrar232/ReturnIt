@@ -1,0 +1,72 @@
+.reports-page {
+  min-height: 100vh;
+  padding: 50px 20px;
+  background: #f5f7fb;
+}
+
+.reports-container {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.reports-container h1 {
+  margin-bottom: 8px;
+}
+
+.reports-subtitle {
+  color: #666;
+  margin-bottom: 30px;
+}
+
+.reports-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.report-card {
+  padding: 25px;
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+}
+
+.report-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.report-header h2 {
+  margin: 0;
+}
+
+.report-type {
+  padding: 6px 10px;
+  border-radius: 5px;
+  font-size: 13px;
+  font-weight: bold;
+}
+
+.report-type.lost {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+.report-type.found {
+  background: #dcfce7;
+  color: #15803d;
+}
+
+.report-card p {
+  margin: 8px 0;
+}
+
+.reports-error {
+  color: #dc2626;
+}
+
+.no-reports {
+  color: #666;
+}

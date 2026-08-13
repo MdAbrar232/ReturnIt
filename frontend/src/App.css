@@ -1,0 +1,103 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+}
+
+.app {
+  min-height: 100vh;
+  background: #f5f7fb;
+}
+
+.navbar {
+  height: 70px;
+  padding: 0 60px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  background: white;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.logo {
+  font-size: 26px;
+  font-weight: bold;
+}
+
+.navbar nav {
+  display: flex;
+  gap: 30px;
+}
+
+.navbar a {
+  text-decoration: none;
+  color: #333;
+  font-size: 15px;
+}
+
+.login-button {
+  padding: 10px 22px;
+  border: none;
+  border-radius: 6px;
+  background: #111827;
+  color: white;
+  cursor: pointer;
+}
+
+.hero {
+  min-height: calc(100vh - 70px);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  text-align: center;
+}
+
+.hero-content {
+  max-width: 700px;
+  padding: 40px;
+}
+
+.hero h1 {
+  margin-bottom: 20px;
+  font-size: 52px;
+}
+
+.hero p {
+  margin-bottom: 35px;
+  font-size: 18px;
+  line-height: 1.6;
+  color: #555;
+}
+
+.hero-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+}
+
+.primary-button,
+.secondary-button {
+  padding: 13px 24px;
+  border-radius: 6px;
+  font-size: 15px;
+  cursor: pointer;
+}
+
+.primary-button {
+  border: none;
+  background: #111827;
+  color: white;
+}
+
+.secondary-button {
+  background: white;
+  border: 1px solid #111827;
+  color: #111827;
+}
