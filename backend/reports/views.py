@@ -78,6 +78,117 @@ class ReportCreateView(APIView):
             status=status.HTTP_201_CREATED,
         )
 
+class BrowseReportsView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        reports = (
+            Report.objects
+            .select_related(
+                "user",
+                "location",
+                "item",
+                "item__category",
+            )
+            .order_by("-report_date", "-id")
+        )
+
+        report_type = request.query_params.get("type")
+        category = request.query_params.get("category")
+        location = request.query_params.get("location")
+        search = request.query_params.get("search")
+
+        if report_type in [
+            Report.ReportType.LOST,
+            Report.ReportType.FOUND,
+        ]:
+            reports = reports.filter(type=report_type)
+
+        if category:
+            reports = reports.filter(
+                item__category_id=category
+            )
+
+        if location:
+            reports = reports.filter(
+                location_id=location
+            )
+
+        if search:
+            reports = reports.filter(
+                item__title__icontains=search
+            )
+
+        return Response(
+            [
+                {
+                    "id": report.id,
+                    "type": report.type,
+                    "description": report.description,
+                    "report_date": report.report_date,
+                    "location": report.location.name,
+                    "item": {
+                        "title": report.item.title,
+                        "description": report.item.description,
+                        "brand": report.item.brand,
+                        "color": report.item.color,
+                        "condition": report.item.condition,
+                        "category": report.item.category.name,
+                    },
+                }
+                for report in reports
+            ],
+            status=status.HTTP_200_OK,
+        )
+
+class ReportDetailView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, report_id):
+        try:
+            report = (
+                Report.objects
+                .select_related(
+                    "user",
+                    "location",
+                    "item",
+                    "item__category",
+                )
+                .get(id=report_id)
+            )
+        except Report.DoesNotExist:
+            return Response(
+                {"error": "Report not found."},
+                status=status.HTTP_404_NOT_FOUND,
+            )
+
+        return Response(
+            {
+                "id": report.id,
+                "type": report.type,
+                "description": report.description,
+                "report_date": report.report_date,
+                "status": report.status,
+                "location": {
+                    "id": report.location.id,
+                    "name": report.location.name,
+                    "description": report.location.description,
+                },
+                "item": {
+                    "id": report.item.id,
+                    "title": report.item.title,
+                    "description": report.item.description,
+                    "brand": report.item.brand,
+                    "color": report.item.color,
+                    "condition": report.item.condition,
+                    "category": {
+                        "id": report.item.category.id,
+                        "name": report.item.category.name,
+                    },
+                },
+            },
+            status=status.HTTP_200_OK,
+        )
 class ReportMatchesView(APIView):
     permission_classes = [IsAuthenticated]
 

@@ -1,6 +1,11 @@
 from django.urls import path
 
-from reports.views import ReportCreateView, ReportMatchesView
+from reports.views import (
+    BrowseReportsView,
+    ReportCreateView,
+    ReportMatchesView,
+    ReportDetailView
+)
 
 
 urlpatterns = [
@@ -10,4 +15,14 @@ urlpatterns = [
         ReportMatchesView.as_view(),
         name="report-matches",
     ),
+    path(
+    "browse/",
+    BrowseReportsView.as_view(),
+    name="report-browse",
+),
+path(
+    "<int:report_id>/",
+    ReportDetailView.as_view(),
+    name="report-detail",
+),
 ]

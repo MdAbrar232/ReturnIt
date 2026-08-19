@@ -56,6 +56,9 @@ function Dashboard() {
             <button onClick={() => navigate("/claims")}>
               My Claims
             </button>
+            <button onClick={() => navigate("/browse")}>
+              All Reports
+            </button>
           </>
         )}
 

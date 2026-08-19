@@ -1,0 +1,101 @@
+.report-details-page {
+  min-height: 100vh;
+  padding: 50px 20px;
+  background: #f5f7fb;
+}
+
+.report-details-container {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.back-button {
+  margin-bottom: 20px;
+  padding: 9px 15px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  background: white;
+  color: #111827;
+  cursor: pointer;
+}
+
+.report-details-card {
+  padding: 30px;
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+}
+
+.report-details-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+.report-details-header h1 {
+  margin: 0 0 6px;
+}
+
+.report-category {
+  margin: 0;
+  color: #666;
+}
+
+.report-type-badge {
+  padding: 7px 12px;
+  border-radius: 5px;
+  font-size: 13px;
+  font-weight: bold;
+}
+
+.report-type-badge.lost {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.report-type-badge.found {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.report-section {
+  margin-bottom: 30px;
+}
+
+.report-section h2,
+.claim-section h2 {
+  margin-bottom: 15px;
+}
+
+.report-section p {
+  margin: 10px 0;
+}
+
+.claim-section {
+  padding-top: 25px;
+  border-top: 1px solid #e5e7eb;
+}
+
+.claim-section p {
+  color: #666;
+}
+
+.claim-section button {
+  padding: 11px 18px;
+  border: none;
+  border-radius: 6px;
+  background: #111827;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.claim-section button:hover {
+  background: #1f2937;
+}
+
+.report-details-error {
+  color: #dc2626;
+}
