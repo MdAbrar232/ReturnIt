@@ -8,6 +8,7 @@ import ClaimForm from "./pages/ClaimForm";
 import MyClaims from "./pages/MyClaims";
 import ClaimDetails from "./pages/ClaimDetails";
 import AdminClaims from "./pages/AdminClaims";
+import Signup from "./pages/Signup";
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
         <Route path="/matches/:reportId" element={<Matches />} />
         <Route path="/claim/:itemId" element={<ClaimForm />}/>
         <Route path="*" element={<Login />} />
+        <Route path="/signup" element={<Signup />} />
         <Route path="/claims" element={<MyClaims />} />
         <Route path="/claims/:claimId" element={<ClaimDetails />}/>
         <Route path="/admin/claims" element={<AdminClaims />}/>
