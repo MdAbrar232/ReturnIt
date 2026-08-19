@@ -8,27 +8,49 @@ function Dashboard() {
     localStorage.getItem("user")
   );
 
+  const isAdmin = user?.role === "ADMIN";
+
   return (
     <div className="dashboard">
-      <h1>Welcome to ReturnIt</h1>
+      <h1>
+        {isAdmin
+          ? "Welcome to ReturnIt — Admin"
+          : "Welcome to ReturnIt"}
+      </h1>
 
       <p>
         Welcome, {user?.username || user?.university_id}.
       </p>
 
-      <div className="dashboard-actions">
-        <button onClick={() => navigate("/report")}>
-          Report Lost / Found Item
-        </button>
+      {isAdmin ? (
+        <div className="dashboard-actions">
+          <button onClick={() => navigate("/admin/claims")}>
+            Manage Claims
+          </button>
 
-        <button onClick={() => navigate("/reports")}>
+          <button>
+            Notifications
+          </button>
+        </div>
+      ) : (
+        <div className="dashboard-actions">
+          <button onClick={() => navigate("/report")}>
+            Report Lost / Found Item
+          </button>
+
+          <button onClick={() => navigate("/reports")}>
             View My Reports
-        </button>
+          </button>
 
-        <button>
-          Notifications
-        </button>
-      </div>
+          <button onClick={() => navigate("/claims")}>
+            My Claims
+          </button>
+
+          <button>
+            Notifications
+          </button>
+        </div>
+      )}
     </div>
   );
 }

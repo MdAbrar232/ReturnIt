@@ -1,0 +1,83 @@
+.claim-form-page {
+  min-height: 100vh;
+  padding: 50px 20px;
+  background: #f5f7fb;
+}
+
+.claim-form-container {
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 35px;
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+}
+
+.claim-form-container h1 {
+  margin-bottom: 8px;
+}
+
+.claim-form-subtitle {
+  color: #666;
+  margin-bottom: 30px;
+}
+
+.claim-form-container form {
+  display: flex;
+  flex-direction: column;
+}
+
+.claim-form-container label {
+  margin-bottom: 8px;
+  font-weight: 600;
+}
+
+.claim-form-container textarea {
+  min-height: 120px;
+  margin-bottom: 22px;
+  padding: 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-family: inherit;
+  font-size: 14px;
+  resize: vertical;
+}
+
+.claim-form-container textarea:focus {
+  outline: none;
+  border-color: #111827;
+}
+
+.claim-form-error {
+  margin-bottom: 20px;
+  color: #dc2626;
+}
+
+.claim-form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+}
+
+.claim-form-actions button {
+  padding: 10px 18px;
+  border: none;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.claim-form-actions button:first-child {
+  background: #e5e7eb;
+  color: #111827;
+}
+
+.claim-form-actions button:last-child {
+  background: #111827;
+  color: white;
+}
+
+.claim-form-actions button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}

@@ -1,13 +1,15 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import "./Matches.css";
 
 function Matches() {
   const { reportId } = useParams();
+  const navigate = useNavigate();
 
   const [matches, setMatches] = useState([]);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(true);
+  
 
   useEffect(() => {
     const fetchMatches = async () => {
@@ -96,6 +98,11 @@ function Matches() {
                 <strong>Condition:</strong>{" "}
                 {match.condition}
               </p>
+              <button
+                onClick={() => navigate(`/claim/${match.item_id}`)}
+              >
+               Claim Ownership
+              </button>
             </div>
           ))}
         </div>
