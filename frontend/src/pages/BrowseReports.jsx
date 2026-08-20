@@ -9,10 +9,15 @@ function BrowseReports() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(true);
 
+  const [categories, setCategories] = useState([]);
+  const [locations, setLocations] = useState([]);
+
   const [search, setSearch] = useState("");
   const [type, setType] = useState("");
   const [category, setCategory] = useState("");
   const [location, setLocation] = useState("");
+
+  
 
   const fetchReports = async () => {
     const token = localStorage.getItem("token");
@@ -66,10 +71,43 @@ function BrowseReports() {
       setLoading(false);
     }
   };
+  const fetchFilters = async () => {
+  const token = localStorage.getItem("token");
+
+  try {
+    const categoryResponse = await fetch(
+      "http://127.0.0.1:8000/api/reports/categories/",
+      {
+        headers: {
+          Authorization: `Token ${token}`,
+        },
+      }
+    );
+
+    const locationResponse = await fetch(
+      "http://127.0.0.1:8000/api/reports/locations/",
+      {
+        headers: {
+          Authorization: `Token ${token}`,
+        },
+      }
+    );
+
+    const categoryData = await categoryResponse.json();
+    const locationData = await locationResponse.json();
+
+    setCategories(categoryData);
+    setLocations(locationData);
+
+  } catch {
+    console.log("Could not load filters");
+  }
+};
 
   useEffect(() => {
     fetchReports();
-  }, []);
+    fetchFilters();
+    }, []);
 
   const handleSearch = (event) => {
     event.preventDefault();
@@ -109,23 +147,40 @@ function BrowseReports() {
             <option value="FOUND">Found</option>
           </select>
 
-          <input
-            type="number"
-            placeholder="Category ID"
-            value={category}
-            onChange={(event) =>
-              setCategory(event.target.value)
-            }
-          />
+<select
+  value={category}
+  onChange={(event) =>
+    setCategory(event.target.value)
+  }
+>
+  <option value="">
+    All Categories
+  </option>
 
-          <input
-            type="number"
-            placeholder="Location ID"
-            value={location}
-            onChange={(event) =>
-              setLocation(event.target.value)
-            }
-          />
+  {categories.map((item) => (
+    <option key={item.id} value={item.id}>
+      {item.name}
+    </option>
+  ))}
+</select>          
+          
+
+          <select
+  value={location}
+  onChange={(event) =>
+    setLocation(event.target.value)
+  }
+>
+  <option value="">
+    All Locations
+  </option>
+
+  {locations.map((item) => (
+    <option key={item.id} value={item.id}>
+      {item.name}
+    </option>
+  ))}
+</select>
 
           <button type="submit">
             Search

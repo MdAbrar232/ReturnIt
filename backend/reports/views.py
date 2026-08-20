@@ -3,7 +3,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
 
-from reports.models import Location
+from reports.models import Category,Location
 from reports.serializers import ReportCreateSerializer
 from reports.services.report_service import ReportService
 
@@ -189,6 +189,40 @@ class ReportDetailView(APIView):
             },
             status=status.HTTP_200_OK,
         )
+class CategoryListView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        categories = Category.objects.all().order_by("name")
+
+        return Response(
+            [
+                {
+                    "id": category.id,
+                    "name": category.name,
+                }
+                for category in categories
+            ],
+            status=status.HTTP_200_OK,
+        )
+
+
+class LocationListView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        locations = Location.objects.all().order_by("name")
+
+        return Response(
+            [
+                {
+                    "id": location.id,
+                    "name": location.name,
+                }
+                for location in locations
+            ],
+            status=status.HTTP_200_OK,
+        )        
 class ReportMatchesView(APIView):
     permission_classes = [IsAuthenticated]
 
