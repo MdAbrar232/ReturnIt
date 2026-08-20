@@ -1,10 +1,17 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import "./ReportForm.css";
 
 function ReportForm() {
+
+  const { reportId } = useParams();
+
+  const isEditMode = Boolean(reportId);
+
   const [reportType, setReportType] = useState("LOST");
   const [description, setDescription] = useState("");
   const [reportDate, setReportDate] = useState("");
+
   const [title, setTitle] = useState("");
   const [itemDescription, setItemDescription] = useState("");
   const [brand, setBrand] = useState("");
@@ -14,7 +21,66 @@ function ReportForm() {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
 
+
+  useEffect(() => {
+
+    if (!isEditMode) {
+      return;
+    }
+
+    const fetchReport = async () => {
+
+      const token = localStorage.getItem("token");
+
+      try {
+
+        const response = await fetch(
+          `http://127.0.0.1:8000/api/reports/${reportId}/`,
+          {
+            headers: {
+              Authorization: `Token ${token}`,
+            },
+          }
+        );
+
+
+        const data = await response.json();
+
+
+        if (!response.ok) {
+          setError("Could not load report.");
+          return;
+        }
+
+
+        setReportType(data.type);
+        setDescription(data.description);
+        setReportDate(data.report_date);
+
+        setTitle(data.item.title);
+        setItemDescription(data.item.description);
+        setBrand(data.item.brand);
+        setColor(data.item.color);
+        setCondition(data.item.condition);
+
+
+      } catch {
+
+        setError("Could not connect to server.");
+
+      }
+
+    };
+
+
+    fetchReport();
+
+  }, [reportId, isEditMode]);
+
+
+
   const handleSubmit = async (event) => {
+
     event.preventDefault();
 
     setError("");
@@ -22,154 +88,296 @@ function ReportForm() {
 
     const token = localStorage.getItem("token");
 
+
     const reportData = {
-      type: reportType,
-      description: description,
+
+      description,
       report_date: reportDate,
-      location: 1,
+
       item: {
-        title: title,
+
+        title,
         description: itemDescription,
-        brand: brand,
-        color: color,
-        condition: condition,
-        category: 1,
-      },
+        brand,
+        color,
+        condition,
+
+      }
+
     };
 
+
     try {
+
+
+      let url;
+      let method;
+
+
+      if (isEditMode) {
+
+        url =
+        `http://127.0.0.1:8000/api/reports/${reportId}/manage/`;
+
+        method = "PATCH";
+
+
+      } else {
+
+
+        url =
+        "http://127.0.0.1:8000/api/reports/";
+
+        method = "POST";
+
+
+        reportData.type = reportType;
+
+        reportData.location = 1;
+
+        reportData.item.category = 1;
+
+      }
+
+
+
       const response = await fetch(
-        "http://127.0.0.1:8000/api/reports/",
+        url,
         {
-          method: "POST",
+          method,
+
           headers: {
+
             "Content-Type": "application/json",
-            Authorization: `Token ${token}`,
+
+            Authorization:
+            `Token ${token}`,
+
           },
+
           body: JSON.stringify(reportData),
+
         }
       );
 
+
       const data = await response.json();
 
+
       if (!response.ok) {
-        setError(data.error || "Could not create report.");
+
+        setError(
+          data.error ||
+          "Operation failed."
+        );
+
         return;
+
       }
 
-      setSuccess("Report created successfully.");
 
-      console.log("Created report:", data);
+      setSuccess(
+        isEditMode
+        ? "Report updated successfully."
+        : "Report created successfully."
+      );
+
 
     } catch {
-      setError("Could not connect to the server.");
+
+      setError(
+        "Could not connect to server."
+      );
+
     }
+
   };
 
+
+
   return (
+
     <div className="report-page">
+
       <div className="report-card">
-        <h1>Create Report</h1>
+
+
+        <h1>
+          {isEditMode
+            ? "Edit Report"
+            : "Create Report"}
+        </h1>
+
 
         <p className="report-subtitle">
-          Report a lost or found item
+
+          {isEditMode
+          ? "Update your lost or found item details"
+          : "Report a lost or found item"}
+
         </p>
+
+
 
         <form onSubmit={handleSubmit}>
 
-          <label>Report Type</label>
 
-          <select
-            value={reportType}
-            onChange={(event) =>
-              setReportType(event.target.value)
-            }
-          >
-            <option value="LOST">Lost Item</option>
-            <option value="FOUND">Found Item</option>
-          </select>
+          {!isEditMode && (
+
+            <>
+            <label>Report Type</label>
+
+            <select
+              value={reportType}
+              onChange={(event)=>
+                setReportType(event.target.value)
+              }
+            >
+
+              <option value="LOST">
+                Lost Item
+              </option>
+
+              <option value="FOUND">
+                Found Item
+              </option>
+
+            </select>
+
+            </>
+
+          )}
+
+
 
           <label>Item Name</label>
 
           <input
-            type="text"
-            placeholder="e.g. Black Samsung Phone"
+
             value={title}
-            onChange={(event) =>
+
+            onChange={(event)=>
               setTitle(event.target.value)
             }
+
             required
+
           />
+
+
 
           <label>Item Description</label>
 
           <textarea
-            placeholder="Describe the item"
+
             value={itemDescription}
-            onChange={(event) =>
+
+            onChange={(event)=>
               setItemDescription(event.target.value)
             }
+
             required
+
           />
+
+
 
           <label>Brand</label>
 
           <input
-            type="text"
-            placeholder="e.g. Samsung"
+
             value={brand}
-            onChange={(event) =>
+
+            onChange={(event)=>
               setBrand(event.target.value)
             }
-            required
+
           />
+
+
 
           <label>Color</label>
 
           <input
-            type="text"
-            placeholder="e.g. Black"
+
             value={color}
-            onChange={(event) =>
+
+            onChange={(event)=>
               setColor(event.target.value)
             }
-            required
+
           />
+
+
 
           <label>Condition</label>
 
           <select
+
             value={condition}
-            onChange={(event) =>
+
+            onChange={(event)=>
               setCondition(event.target.value)
             }
+
           >
-            <option value="GOOD">Good</option>
-            <option value="DAMAGED">Damaged</option>
-            <option value="POOR">Poor</option>
+
+            <option value="GOOD">
+              Good
+            </option>
+
+            <option value="DAMAGED">
+              Damaged
+            </option>
+
+            <option value="FAIR">
+              Fair
+            </option>
+
+
           </select>
 
-          <label>Report Description</label>
+
+
+          <label>
+            Report Description
+          </label>
+
 
           <textarea
-            placeholder="Where did you lose/find it? Add any additional details."
+
             value={description}
-            onChange={(event) =>
+
+            onChange={(event)=>
               setDescription(event.target.value)
             }
+
             required
+
           />
 
-          <label>Report Date</label>
+
+
+          <label>
+            Report Date
+          </label>
+
 
           <input
+
             type="date"
+
             value={reportDate}
-            onChange={(event) =>
+
+            onChange={(event)=>
               setReportDate(event.target.value)
             }
+
             required
+
           />
+
+
 
           {error && (
             <p className="report-error">
@@ -177,20 +385,35 @@ function ReportForm() {
             </p>
           )}
 
+
+
           {success && (
             <p className="report-success">
               {success}
             </p>
           )}
 
+
+
           <button type="submit">
-            Submit Report
+
+            {isEditMode
+            ? "Update Report"
+            : "Submit Report"}
+
           </button>
 
+
         </form>
+
+
       </div>
+
     </div>
+
   );
+
 }
+
 
 export default ReportForm;

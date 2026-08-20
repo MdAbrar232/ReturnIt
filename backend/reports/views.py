@@ -189,6 +189,107 @@ class ReportDetailView(APIView):
             },
             status=status.HTTP_200_OK,
         )
+class ReportManageView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def patch(self, request, report_id):
+        try:
+            report = (
+                Report.objects
+                .select_related(
+                    "item",
+                    "location",
+                )
+                .get(
+                    id=report_id,
+                    user=request.user,
+                )
+            )
+        except Report.DoesNotExist:
+            return Response(
+                {"error": "Report not found."},
+                status=status.HTTP_404_NOT_FOUND,
+            )
+
+        data = request.data
+
+        if "description" in data:
+            report.description = data["description"]
+
+        if "location" in data:
+            try:
+                report.location = Location.objects.get(
+                    id=data["location"]
+                )
+            except Location.DoesNotExist:
+                return Response(
+                    {"error": "Location not found."},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
+
+        if "report_date" in data:
+            report.report_date = data["report_date"]
+
+        report.save()
+
+        item = report.item
+
+        for field in [
+            "title",
+            "description",
+            "brand",
+            "color",
+            "condition",
+        ]:
+            if field in data:
+                setattr(
+                    item,
+                    field,
+                    data[field]
+                )
+
+        if "category" in data:
+            try:
+                item.category = Category.objects.get(
+                    id=data["category"]
+                )
+            except Category.DoesNotExist:
+                return Response(
+                    {"error": "Category not found."},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
+
+        item.save()
+
+        return Response(
+            {
+                "message": "Report updated successfully."
+            },
+            status=status.HTTP_200_OK,
+        )
+
+
+    def delete(self, request, report_id):
+        try:
+            report = Report.objects.get(
+                id=report_id,
+                user=request.user,
+            )
+        except Report.DoesNotExist:
+            return Response(
+                {"error": "Report not found."},
+                status=status.HTTP_404_NOT_FOUND,
+            )
+
+        report.delete()
+
+        return Response(
+            {
+                "message": "Report deleted successfully."
+            },
+            status=status.HTTP_200_OK,
+        )
+        
 class CategoryListView(APIView):
     permission_classes = [IsAuthenticated]
 

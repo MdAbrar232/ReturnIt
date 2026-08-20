@@ -52,6 +52,10 @@ function App() {
           path="/report/:reportId"
           element={<ReportDetails />}
         />
+        <Route 
+          path="/report/edit/:reportId" 
+          element={<ReportForm />} 
+        />
         {/* Keep wildcard LAST */}
         <Route path="*" element={<Login />} />
       </Routes>

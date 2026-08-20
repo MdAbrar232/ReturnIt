@@ -7,6 +7,7 @@ from reports.views import (
     ReportCreateView,
     ReportDetailView,
     ReportMatchesView,
+    ReportManageView,
 )
 
 
@@ -45,5 +46,10 @@ urlpatterns = [
         "<int:report_id>/",
         ReportDetailView.as_view(),
         name="report-detail",
+    ),
+    path(
+        "<int:report_id>/manage/",
+        ReportManageView.as_view(),
+        name="report-manage",
     ),
 ]
