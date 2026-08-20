@@ -6,6 +6,7 @@ from rest_framework.permissions import IsAuthenticated
 from reports.models import Category,Location
 from reports.serializers import ReportCreateSerializer
 from reports.services.report_service import ReportService
+from claims.permissions import IsAdminUser
 
 from reports.models import Report
 from reports.services.matching_service import MatchingService
@@ -289,7 +290,7 @@ class ReportManageView(APIView):
             },
             status=status.HTTP_200_OK,
         )
-        
+
 class CategoryListView(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -381,5 +382,125 @@ class ReportMatchesView(APIView):
                 }
                 for match in matches
             ],
+            status=status.HTTP_200_OK,
+        )
+class AdminReportListView(APIView):
+    permission_classes = [IsAdminUser]
+
+    def get(self, request):
+
+        reports = (
+            Report.objects
+            .select_related(
+                "user",
+                "location",
+                "item",
+                "item__category",
+            )
+            .order_by("-created_at")
+        )
+
+        return Response(
+            [
+                {
+                    "id": report.id,
+                    "type": report.type,
+                    "status": report.status,
+                    "owner": report.user.username,
+                    "description": report.description,
+                    "location": report.location.name,
+                    "item": {
+                        "title": report.item.title,
+                        "category": report.item.category.name,
+                        "brand": report.item.brand,
+                        "color": report.item.color,
+                        "condition": report.item.condition,
+                    },
+                }
+                for report in reports
+            ],
+            status=status.HTTP_200_OK,
+        )
+
+
+
+class AdminReportStatusView(APIView):
+    permission_classes = [IsAdminUser]
+
+    def patch(self, request, report_id):
+
+        try:
+            report = Report.objects.get(
+                id=report_id
+            )
+
+        except Report.DoesNotExist:
+
+            return Response(
+                {"error": "Report not found."},
+                status=status.HTTP_404_NOT_FOUND,
+            )
+
+
+        new_status = request.data.get(
+            "status"
+        )
+
+
+        if new_status not in [
+            Report.ReportStatus.ACTIVE,
+            Report.ReportStatus.RESOLVED,
+            Report.ReportStatus.CLOSED,
+        ]:
+
+            return Response(
+                {
+                    "error":
+                    "Invalid report status."
+                },
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+
+        report.status = new_status
+        report.save()
+
+
+        return Response(
+            {
+                "message":
+                "Report status updated successfully."
+            },
+            status=status.HTTP_200_OK,
+        )
+
+
+
+class AdminReportDeleteView(APIView):
+    permission_classes = [IsAdminUser]
+
+    def delete(self, request, report_id):
+
+        try:
+            report = Report.objects.get(
+                id=report_id
+            )
+
+        except Report.DoesNotExist:
+
+            return Response(
+                {"error": "Report not found."},
+                status=status.HTTP_404_NOT_FOUND,
+            )
+
+
+        report.delete()
+
+
+        return Response(
+            {
+                "message":
+                "Report deleted successfully."
+            },
             status=status.HTTP_200_OK,
         )

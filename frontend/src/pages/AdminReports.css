@@ -1,0 +1,23 @@
+.admin-reports-page {
+  min-height: 100vh;
+  padding: 40px;
+  background: #f5f7fb;
+}
+
+.admin-reports-container {
+  max-width: 900px;
+  margin: auto;
+}
+
+.admin-report-card {
+  background: white;
+  padding: 25px;
+  margin-bottom: 20px;
+  border-radius: 10px;
+}
+
+.admin-report-card button {
+  margin-right: 10px;
+  padding: 10px 15px;
+  cursor: pointer;
+}

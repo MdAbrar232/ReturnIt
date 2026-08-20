@@ -8,9 +8,11 @@ import ClaimForm from "./pages/ClaimForm";
 import MyClaims from "./pages/MyClaims";
 import ClaimDetails from "./pages/ClaimDetails";
 import AdminClaims from "./pages/AdminClaims";
+import AdminReports from "./pages/AdminReports";
 import Signup from "./pages/Signup";
 import BrowseReports from "./pages/BrowseReports";
 import ReportDetails from "./pages/ReportDetails";
+
 
 function App() {
   return (
@@ -47,6 +49,11 @@ function App() {
         <Route
           path="/admin/claims"
           element={<AdminClaims />}
+        />
+          
+        <Route
+            path="/admin/reports"
+            element={<AdminReports />}
         />
         <Route
           path="/report/:reportId"

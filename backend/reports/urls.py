@@ -6,8 +6,11 @@ from reports.views import (
     LocationListView,
     ReportCreateView,
     ReportDetailView,
-    ReportMatchesView,
     ReportManageView,
+    ReportMatchesView,
+    AdminReportListView,
+    AdminReportStatusView,
+    AdminReportDeleteView,
 )
 
 
@@ -51,5 +54,22 @@ urlpatterns = [
         "<int:report_id>/manage/",
         ReportManageView.as_view(),
         name="report-manage",
+    ),
+    path(
+    "admin/",
+    AdminReportListView.as_view(),
+    name="admin-report-list",
+),
+
+    path(
+        "admin/<int:report_id>/status/",
+        AdminReportStatusView.as_view(),
+        name="admin-report-status",
+    ),
+
+    path(   
+        "admin/<int:report_id>/",
+        AdminReportDeleteView.as_view(),
+        name="admin-report-delete",
     ),
 ]
