@@ -1,6 +1,8 @@
+import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
+
 import ProtectedRoute from "./components/ProtectedRoute";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Navbar from "./components/Navbar";
+
 import MyReports from "./pages/MyReports";
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
@@ -18,166 +20,222 @@ import Notifications from "./pages/Notifications";
 import AdminActivityLogs from "./pages/AdminActivityLogs";
 
 
-function App() {
-      const token = localStorage.getItem("token");
+function AppContent() {
+
+  const token = localStorage.getItem("token");
+
+  const location = useLocation();
+
+
+  const hideNavbar =
+    location.pathname === "/login" ||
+    location.pathname === "/signup";
+
+
   return (
-    <BrowserRouter>
-          {token && <Navbar />}
+
+    <>
+
+      {token && !hideNavbar && <Navbar />}
+
+
       <Routes>
 
-  {/* Public */}
-  <Route path="/login" element={<Login />} />
-  <Route path="/signup" element={<Signup />} />
+
+        {/* Public Routes */}
+
+        <Route
+          path="/login"
+          element={<Login />}
+        />
 
 
-  {/* Student/User Protected Routes */}
-  <Route
-    path="/dashboard"
-    element={
-      <ProtectedRoute>
-        <Dashboard />
-      </ProtectedRoute>
-    }
-  />
+        <Route
+          path="/signup"
+          element={<Signup />}
+        />
 
 
-  <Route
-    path="/report"
-    element={
-      <ProtectedRoute>
-        <ReportForm />
-      </ProtectedRoute>
-    }
-  />
+
+        {/* User Protected Routes */}
 
 
-  <Route
-    path="/reports"
-    element={
-      <ProtectedRoute>
-        <MyReports />
-      </ProtectedRoute>
-    }
-  />
+        <Route
+          path="/dashboard"
+          element={
+            <ProtectedRoute>
+              <Dashboard />
+            </ProtectedRoute>
+          }
+        />
 
 
-  <Route
-    path="/browse"
-    element={
-      <ProtectedRoute>
-        <BrowseReports />
-      </ProtectedRoute>
-    }
-  />
+        <Route
+          path="/report"
+          element={
+            <ProtectedRoute>
+              <ReportForm />
+            </ProtectedRoute>
+          }
+        />
 
 
-  <Route
-    path="/notifications"
-    element={
-      <ProtectedRoute>
-        <Notifications />
-      </ProtectedRoute>
-    }
-  />
+        <Route
+          path="/reports"
+          element={
+            <ProtectedRoute>
+              <MyReports />
+            </ProtectedRoute>
+          }
+        />
 
 
-  <Route
-    path="/matches/:reportId"
-    element={
-      <ProtectedRoute>
-        <Matches />
-      </ProtectedRoute>
-    }
-  />
+        <Route
+          path="/browse"
+          element={
+            <ProtectedRoute>
+              <BrowseReports />
+            </ProtectedRoute>
+          }
+        />
 
 
-  <Route
-    path="/claim/:itemId"
-    element={
-      <ProtectedRoute>
-        <ClaimForm />
-      </ProtectedRoute>
-    }
-  />
+        <Route
+          path="/notifications"
+          element={
+            <ProtectedRoute>
+              <Notifications />
+            </ProtectedRoute>
+          }
+        />
 
 
-  <Route
-    path="/claims"
-    element={
-      <ProtectedRoute>
-        <MyClaims />
-      </ProtectedRoute>
-    }
-  />
+        <Route
+          path="/matches/:reportId"
+          element={
+            <ProtectedRoute>
+              <Matches />
+            </ProtectedRoute>
+          }
+        />
 
 
-  <Route
-    path="/claims/:claimId"
-    element={
-      <ProtectedRoute>
-        <ClaimDetails />
-      </ProtectedRoute>
-    }
-  />
+        <Route
+          path="/claim/:itemId"
+          element={
+            <ProtectedRoute>
+              <ClaimForm />
+            </ProtectedRoute>
+          }
+        />
 
 
-  <Route
-    path="/report/:reportId"
-    element={
-      <ProtectedRoute>
-        <ReportDetails />
-      </ProtectedRoute>
-    }
-  />
+        <Route
+          path="/claims"
+          element={
+            <ProtectedRoute>
+              <MyClaims />
+            </ProtectedRoute>
+          }
+        />
 
 
-  <Route
-    path="/report/edit/:reportId"
-    element={
-      <ProtectedRoute>
-        <ReportForm />
-      </ProtectedRoute>
-    }
-  />
+        <Route
+          path="/claims/:claimId"
+          element={
+            <ProtectedRoute>
+              <ClaimDetails />
+            </ProtectedRoute>
+          }
+        />
 
 
-  {/* Admin Protected Routes */}
-  <Route
-    path="/admin/claims"
-    element={
-      <ProtectedRoute adminOnly>
-        <AdminClaims />
-      </ProtectedRoute>
-    }
-  />
+        <Route
+          path="/report/:reportId"
+          element={
+            <ProtectedRoute>
+              <ReportDetails />
+            </ProtectedRoute>
+          }
+        />
 
 
-  <Route
-    path="/admin/reports"
-    element={
-      <ProtectedRoute adminOnly>
-        <AdminReports />
-      </ProtectedRoute>
-    }
-  />
+        <Route
+          path="/report/edit/:reportId"
+          element={
+            <ProtectedRoute>
+              <ReportForm />
+            </ProtectedRoute>
+          }
+        />
 
 
-  <Route
-    path="/admin/logs"
-    element={
-      <ProtectedRoute adminOnly>
-        <AdminActivityLogs />
-      </ProtectedRoute>
-    }
-  />
+
+        {/* Admin Protected Routes */}
 
 
-  {/* Fallback */}
-  <Route path="*" element={<Login />} />
+        <Route
+          path="/admin/claims"
+          element={
+            <ProtectedRoute adminOnly>
+              <AdminClaims />
+            </ProtectedRoute>
+          }
+        />
 
-</Routes>
-    </BrowserRouter>
+
+        <Route
+          path="/admin/reports"
+          element={
+            <ProtectedRoute adminOnly>
+              <AdminReports />
+            </ProtectedRoute>
+          }
+        />
+
+
+        <Route
+          path="/admin/logs"
+          element={
+            <ProtectedRoute adminOnly>
+              <AdminActivityLogs />
+            </ProtectedRoute>
+          }
+        />
+
+
+
+        {/* Fallback */}
+
+        <Route
+          path="*"
+          element={<Login />}
+        />
+
+
+      </Routes>
+
+    </>
+
   );
+
 }
+
+
+
+function App() {
+
+  return (
+
+    <BrowserRouter>
+
+      <AppContent />
+
+    </BrowserRouter>
+
+  );
+
+}
+
 
 export default App;
