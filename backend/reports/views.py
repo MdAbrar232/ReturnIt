@@ -2,22 +2,49 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.parsers import MultiPartParser, FormParser
 
-from reports.models import Category,Location
+from notifications.patterns.singleton.logger import Logger
+
+from reports.patterns.proxy.caching_proxy import (
+    CachingBrowseReportsProxy,
+)
+from reports.models import Category, Location, Report
 from reports.serializers import ReportCreateSerializer
 from reports.services.report_service import ReportService
+from reports.services.matching_service import MatchingService
+
 from claims.permissions import IsAdminUser
 
-from reports.models import Report
-from reports.services.matching_service import MatchingService
+
+def get_item_photos(item, request):
+    return [
+        {
+            "id": photo.id,
+            "image": request.build_absolute_uri(
+                photo.image.url
+            ),
+        }
+        for photo in item.photos.all()
+    ]
+
 
 class ReportCreateView(APIView):
     permission_classes = [IsAuthenticated]
-    
+    parser_classes = [MultiPartParser, FormParser]
+
     def get(self, request):
-        reports = Report.objects.filter(
-            user=request.user
-        ).order_by("-report_date", "-id")
+        reports = (
+            Report.objects
+            .filter(user=request.user)
+            .select_related(
+                "location",
+                "item",
+                "item__category",
+            )
+            .prefetch_related("item__photos")
+            .order_by("-report_date", "-id")
+        )
 
         return Response(
             [
@@ -34,15 +61,45 @@ class ReportCreateView(APIView):
                         "color": report.item.color,
                         "condition": report.item.condition,
                         "category": report.item.category.name,
+                        "photos": get_item_photos(
+                            report.item,
+                            request,
+                        ),
                     },
                 }
                 for report in reports
             ],
             status=status.HTTP_200_OK,
         )
-    
+
     def post(self, request):
-        serializer = ReportCreateSerializer(data=request.data)
+        data = request.data
+
+        item_data = {
+            "title": data.get("item_title"),
+            "description": data.get("item_description"),
+            "brand": data.get("item_brand", ""),
+            "color": data.get("item_color", ""),
+            "condition": data.get("item_condition"),
+            "category": data.get("item_category"),
+        }
+
+        image = request.FILES.get("image")
+
+        if image:
+            item_data["image"] = image
+
+        report_data = {
+            "type": data.get("type"),
+            "description": data.get("description"),
+            "report_date": data.get("report_date"),
+            "location": data.get("location"),
+            "item": item_data,
+        }
+
+        serializer = ReportCreateSerializer(
+            data=report_data
+        )
         serializer.is_valid(raise_exception=True)
 
         data = serializer.validated_data
@@ -68,6 +125,8 @@ class ReportCreateView(APIView):
             },
         )
 
+        CachingBrowseReportsProxy.clear_cache()
+
         return Response(
             {
                 "id": report.id,
@@ -79,46 +138,24 @@ class ReportCreateView(APIView):
             status=status.HTTP_201_CREATED,
         )
 
+
 class BrowseReportsView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
-        reports = (
-            Report.objects
-            .select_related(
-                "user",
-                "location",
-                "item",
-                "item__category",
-            )
-            .order_by("-report_date", "-id")
-        )
+        proxy = CachingBrowseReportsProxy()
 
         report_type = request.query_params.get("type")
         category = request.query_params.get("category")
         location = request.query_params.get("location")
         search = request.query_params.get("search")
 
-        if report_type in [
-            Report.ReportType.LOST,
-            Report.ReportType.FOUND,
-        ]:
-            reports = reports.filter(type=report_type)
-
-        if category:
-            reports = reports.filter(
-                item__category_id=category
-            )
-
-        if location:
-            reports = reports.filter(
-                location_id=location
-            )
-
-        if search:
-            reports = reports.filter(
-                item__title__icontains=search
-            )
+        reports = proxy.get_reports(
+            report_type=report_type,
+            category=category,
+            location=location,
+            search=search,
+        )
 
         return Response(
             [
@@ -135,12 +172,17 @@ class BrowseReportsView(APIView):
                         "color": report.item.color,
                         "condition": report.item.condition,
                         "category": report.item.category.name,
+                        "photos": get_item_photos(
+                            report.item,
+                            request,
+                        ),
                     },
                 }
                 for report in reports
             ],
             status=status.HTTP_200_OK,
         )
+
 
 class ReportDetailView(APIView):
     permission_classes = [IsAuthenticated]
@@ -155,6 +197,7 @@ class ReportDetailView(APIView):
                     "item",
                     "item__category",
                 )
+                .prefetch_related("item__photos")
                 .get(id=report_id)
             )
         except Report.DoesNotExist:
@@ -186,10 +229,16 @@ class ReportDetailView(APIView):
                         "id": report.item.category.id,
                         "name": report.item.category.name,
                     },
+                    "photos": get_item_photos(
+                        report.item,
+                        request,
+                    ),
                 },
             },
             status=status.HTTP_200_OK,
         )
+
+
 class ReportManageView(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -246,7 +295,7 @@ class ReportManageView(APIView):
                 setattr(
                     item,
                     field,
-                    data[field]
+                    data[field],
                 )
 
         if "category" in data:
@@ -262,13 +311,19 @@ class ReportManageView(APIView):
 
         item.save()
 
+        CachingBrowseReportsProxy.clear_cache()
+
+        Logger().log(
+            f"User {request.user.username} edited "
+            f"Report #{report.id}"
+        )
+
         return Response(
             {
                 "message": "Report updated successfully."
             },
             status=status.HTTP_200_OK,
         )
-
 
     def delete(self, request, report_id):
         try:
@@ -282,7 +337,16 @@ class ReportManageView(APIView):
                 status=status.HTTP_404_NOT_FOUND,
             )
 
+        deleted_report_id = report.id
+
         report.delete()
+
+        CachingBrowseReportsProxy.clear_cache()
+
+        Logger().log(
+            f"User {request.user.username} deleted "
+            f"Report #{deleted_report_id}"
+        )
 
         return Response(
             {
@@ -290,6 +354,7 @@ class ReportManageView(APIView):
             },
             status=status.HTTP_200_OK,
         )
+
 
 class CategoryListView(APIView):
     permission_classes = [IsAuthenticated]
@@ -324,7 +389,9 @@ class LocationListView(APIView):
                 for location in locations
             ],
             status=status.HTTP_200_OK,
-        )        
+        )
+
+
 class ReportMatchesView(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -355,7 +422,7 @@ class ReportMatchesView(APIView):
 
         strategy_type = request.query_params.get(
             "strategy",
-            "weighted",
+            "strict",
         )
 
         try:
@@ -378,17 +445,21 @@ class ReportMatchesView(APIView):
                     "brand": match["item"].brand,
                     "color": match["item"].color,
                     "condition": match["item"].condition,
-                    "score": match["score"],
+                    "photos": get_item_photos(
+                        match["item"],
+                        request,
+                    ),
                 }
                 for match in matches
             ],
             status=status.HTTP_200_OK,
         )
+
+
 class AdminReportListView(APIView):
     permission_classes = [IsAdminUser]
 
     def get(self, request):
-
         reports = (
             Report.objects
             .select_related(
@@ -397,6 +468,7 @@ class AdminReportListView(APIView):
                 "item",
                 "item__category",
             )
+            .prefetch_related("item__photos")
             .order_by("-created_at")
         )
 
@@ -415,6 +487,10 @@ class AdminReportListView(APIView):
                         "brand": report.item.brand,
                         "color": report.item.color,
                         "condition": report.item.condition,
+                        "photos": get_item_photos(
+                            report.item,
+                            request,
+                        ),
                     },
                 }
                 for report in reports
@@ -423,84 +499,85 @@ class AdminReportListView(APIView):
         )
 
 
-
 class AdminReportStatusView(APIView):
     permission_classes = [IsAdminUser]
 
     def patch(self, request, report_id):
-
         try:
             report = Report.objects.get(
                 id=report_id
             )
-
         except Report.DoesNotExist:
-
             return Response(
                 {"error": "Report not found."},
                 status=status.HTTP_404_NOT_FOUND,
             )
 
-
         new_status = request.data.get(
             "status"
         )
-
 
         if new_status not in [
             Report.ReportStatus.ACTIVE,
             Report.ReportStatus.RESOLVED,
             Report.ReportStatus.CLOSED,
         ]:
-
             return Response(
                 {
-                    "error":
-                    "Invalid report status."
+                    "error": "Invalid report status."
                 },
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
-
         report.status = new_status
         report.save()
 
+        CachingBrowseReportsProxy.clear_cache()
+
+        Logger().log(
+            f"Admin {request.user.username} changed "
+            f"Report #{report.id} status to "
+            f"{report.status}"
+        )
 
         return Response(
             {
                 "message":
-                "Report status updated successfully."
+                    "Report status updated successfully."
             },
             status=status.HTTP_200_OK,
         )
-
 
 
 class AdminReportDeleteView(APIView):
     permission_classes = [IsAdminUser]
 
     def delete(self, request, report_id):
-
         try:
             report = Report.objects.get(
                 id=report_id
             )
-
         except Report.DoesNotExist:
-
             return Response(
                 {"error": "Report not found."},
                 status=status.HTTP_404_NOT_FOUND,
             )
 
+        deleted_report_id = report.id
 
         report.delete()
 
+        CachingBrowseReportsProxy.clear_cache()
+
+        Logger().log(
+            f"Admin {request.user.username} deleted "
+            f"Report #{deleted_report_id}"
+        )
 
         return Response(
             {
                 "message":
-                "Report deleted successfully."
+                    "Report deleted successfully."
             },
             status=status.HTTP_200_OK,
         )

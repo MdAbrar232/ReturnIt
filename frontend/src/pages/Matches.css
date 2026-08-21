@@ -43,7 +43,19 @@
   margin: 0;
 }
 
-.match-score {
+.match-image-container {
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.match-image {
+  width: 100%;
+  max-height: 300px;
+  object-fit: contain;
+  border-radius: 8px;
+}
+
+.match-type {
   padding: 6px 10px;
   border-radius: 5px;
   background: #e0e7ff;

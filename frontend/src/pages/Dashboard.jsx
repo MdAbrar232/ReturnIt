@@ -79,7 +79,13 @@ function Dashboard() {
           View My Reports
         </button>
 
-
+        <button
+          onClick={() =>
+            navigate("/claims")
+          }
+        >
+          My Claims
+        </button>
 
         <button
           onClick={() =>
@@ -91,16 +97,16 @@ function Dashboard() {
 
 
 
-        <button>
+        <button
+          onClick={() => navigate("/notifications")}
+        >
           Notifications
         </button>
 
 
 
         {user?.role === "ADMIN" && (
-
           <>
-
             <button
               onClick={() =>
                 navigate("/admin/claims")
@@ -108,7 +114,6 @@ function Dashboard() {
             >
               Manage Claims
             </button>
-
 
             <button
               onClick={() =>
@@ -118,8 +123,14 @@ function Dashboard() {
               Manage Reports
             </button>
 
+            <button
+              onClick={() =>
+                navigate("/admin/logs")
+              }
+            >
+              Activity Logs
+            </button>
           </>
-
         )}
 
 

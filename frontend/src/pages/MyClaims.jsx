@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./MyClaims.css";
+import NavigationButtons from "../components/NavigationButtons";
 
 function MyClaims() {
   const navigate = useNavigate();
@@ -49,6 +50,7 @@ function MyClaims() {
     return (
       <div className="claims-page">
         <div className="claims-container">
+          
           <p>Loading claims...</p>
         </div>
       </div>
@@ -58,6 +60,7 @@ function MyClaims() {
   return (
     <div className="claims-page">
       <div className="claims-container">
+        <NavigationButtons />
         <h1>My Claims</h1>
 
         <p className="claims-subtitle">

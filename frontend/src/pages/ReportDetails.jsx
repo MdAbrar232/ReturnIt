@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import "./ReportDetails.css";
+import NavigationButtons from "../components/NavigationButtons";
 
 function ReportDetails() {
   const { reportId } = useParams();
@@ -67,7 +68,7 @@ function ReportDetails() {
   return (
     <div className="report-details-page">
       <div className="report-details-container">
-
+        <NavigationButtons />
         <button
           className="back-button"
           onClick={() => navigate("/browse")}

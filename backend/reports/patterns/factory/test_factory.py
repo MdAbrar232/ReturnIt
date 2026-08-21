@@ -2,7 +2,7 @@ from users.models import User
 from reports.services.report_service import ReportService
 from unittest.mock import patch
 from datetime import date
-
+from reports.patterns.factory.registry import ReportFactoryRegistry
 from django.test import TestCase
 
 from reports.models import Location, Report, Category 
@@ -153,5 +153,26 @@ class ReportFactoryTest(TestCase):
         )
 
         self.assertEqual(report.type, Report.ReportType.FOUND)
+    def test_registry_returns_lost_creator(self):
+        creator_class = ReportFactoryRegistry.get_creator("LOST")
+
+        self.assertEqual(
+            creator_class,
+            LostReportCreator,
+        )
+
+
+    def test_registry_returns_found_creator(self):
+        creator_class = ReportFactoryRegistry.get_creator("FOUND")
+
+        self.assertEqual(
+            creator_class,
+            FoundReportCreator,
+        )
+
+
+    def test_registry_rejects_invalid_report_type(self):
+        with self.assertRaises(ValueError):
+            ReportFactoryRegistry.get_creator("INVALID")
 
        

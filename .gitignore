@@ -25,3 +25,8 @@ frontend/dist/
 # OS
 .DS_Store
 Thumbs.db
+
+# Runtime/generated files
+backend/logs/
+backend/media/
+backend/item_photos/

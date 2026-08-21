@@ -12,7 +12,8 @@ import AdminReports from "./pages/AdminReports";
 import Signup from "./pages/Signup";
 import BrowseReports from "./pages/BrowseReports";
 import ReportDetails from "./pages/ReportDetails";
-
+import Notifications from "./pages/Notifications";
+import AdminActivityLogs from "./pages/AdminActivityLogs";
 
 function App() {
   return (
@@ -20,11 +21,16 @@ function App() {
       <Routes>
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
-
+        
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/report" element={<ReportForm />} />
         <Route path="/reports" element={<MyReports />} />
         <Route path="/browse" element={<BrowseReports />} />
+
+        <Route
+          path="/notifications"
+          element={<Notifications />}
+        />
 
         <Route
           path="/matches/:reportId"
@@ -55,6 +61,12 @@ function App() {
             path="/admin/reports"
             element={<AdminReports />}
         />
+
+        <Route
+          path="/admin/logs"
+          element={<AdminActivityLogs />}
+        />
+        
         <Route
           path="/report/:reportId"
           element={<ReportDetails />}

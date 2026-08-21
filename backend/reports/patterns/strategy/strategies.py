@@ -1,63 +1,55 @@
 from abc import ABC, abstractmethod
 
 
-class MatchStrategy(ABC):     #StrategyInterface
+class MatchStrategy(ABC):  # StrategyInterface
 
     @abstractmethod
     def execute(self, lost_item, found_items):
         pass
 
-class BasicMatchStrategy(MatchStrategy):   #ConcreteStrategy
+
+class StrictMatchStrategy(MatchStrategy):  # ConcreteStrategy
 
     def execute(self, lost_item, found_items):
         matches = []
 
         for found_item in found_items:
-            score = 0
-
-            if lost_item.category == found_item.category:
-                score += 1
-
-            if lost_item.brand == found_item.brand:
-                score += 1
-
-            if lost_item.color == found_item.color:
-                score += 1
-
-            if lost_item.condition == found_item.condition:
-                score += 1
-
-            matches.append({
-                "item": found_item,
-                "score": score,
-            })
+            if (
+                lost_item.category == found_item.category
+                and lost_item.brand == found_item.brand
+                and lost_item.color == found_item.color
+                and lost_item.condition == found_item.condition
+            ):
+                matches.append({
+                    "item": found_item,
+                })
 
         return matches
 
 
-class WeightedMatchStrategy(MatchStrategy):   #ConcreteStrategy
+class FlexibleMatchStrategy(MatchStrategy):  # ConcreteStrategy
 
     def execute(self, lost_item, found_items):
         matches = []
 
         for found_item in found_items:
-            score = 0
+            category_matches = (
+                lost_item.category == found_item.category
+            )
 
-            if lost_item.brand == found_item.brand:
-                score += 30
+            brand_matches = (
+                lost_item.brand == found_item.brand
+            )
 
-            if lost_item.color == found_item.color:
-                score += 30
+            color_matches = (
+                lost_item.color == found_item.color
+            )
 
-            if lost_item.category == found_item.category:
-                score += 25
-
-            if lost_item.condition == found_item.condition:
-                score += 15
-
-            matches.append({
-                "item": found_item,
-                "score": score,
-            })
+            if category_matches and (
+                brand_matches or color_matches
+            ):
+                matches.append({
+                    "item": found_item,
+                })
 
         return matches

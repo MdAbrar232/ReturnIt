@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./MyReports.css";
+import NavigationButtons from "../components/NavigationButtons";
 
 function MyReports() {
 
@@ -126,7 +127,7 @@ function MyReports() {
     <div className="reports-page">
 
       <div className="reports-container">
-
+      <NavigationButtons />
 
         <h1>
           My Reports

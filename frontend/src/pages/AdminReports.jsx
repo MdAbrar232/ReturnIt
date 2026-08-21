@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import "./AdminReports.css";
+import NavigationButtons from "../components/NavigationButtons";
 
 function AdminReports() {
 
@@ -151,7 +152,8 @@ function AdminReports() {
 
       <div className="admin-reports-container">
 
-
+      <NavigationButtons />
+      
         <h1>
           Manage Reports
         </h1>

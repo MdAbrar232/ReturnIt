@@ -1,0 +1,10 @@
+.navigation-buttons {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.navigation-buttons button {
+  padding: 8px 16px;
+  cursor: pointer;
+}

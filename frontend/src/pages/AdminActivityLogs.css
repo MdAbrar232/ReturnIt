@@ -1,0 +1,42 @@
+.admin-logs-page {
+  min-height: 100vh;
+  padding: 40px 20px;
+  background: #f5f7fb;
+}
+
+.admin-logs-container {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.admin-logs-container h1 {
+  margin-bottom: 10px;
+}
+
+.admin-logs-subtitle {
+  margin-bottom: 30px;
+  color: #555;
+}
+
+.admin-logs-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.admin-log-entry {
+  padding: 14px 18px;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+.admin-logs-error {
+  color: #b00020;
+}
+
+.admin-logs-message {
+  color: #555;
+}

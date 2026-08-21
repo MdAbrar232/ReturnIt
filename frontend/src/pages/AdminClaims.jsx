@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./AdminClaims.css";
+import NavigationButtons from "../components/NavigationButtons";
 
 function AdminClaims() {
   const navigate = useNavigate();
@@ -95,6 +96,7 @@ function AdminClaims() {
   return (
     <div className="admin-claims-page">
       <div className="admin-claims-container">
+        <NavigationButtons />
         <h1>Manage Claims</h1>
 
         <p className="admin-claims-subtitle">
@@ -182,12 +184,7 @@ function AdminClaims() {
           ))}
         </div>
 
-        <button
-          className="back-dashboard-button"
-          onClick={() => navigate("/dashboard")}
-        >
-          Back to Dashboard
-        </button>
+       
       </div>
     </div>
   );

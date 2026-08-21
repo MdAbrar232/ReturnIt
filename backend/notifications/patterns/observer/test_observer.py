@@ -1,15 +1,17 @@
 from unittest.mock import Mock
+
 from django.test import TestCase
+
 from users.models import User
 from reports.models import Category, Item, Location, Report
-from reports.services.matching_service import MatchingService
+from notifications.models import Notification
 from notifications.patterns.observer.observers import (
     ActivityLogObserver,
     MatchObserver,
     NotificationObserver,
 )
 from notifications.patterns.observer.subject import ReportSubject
-from notifications.models import Notification
+
 
 class ObserverTest(TestCase):
 
@@ -156,4 +158,3 @@ class ObserverTest(TestCase):
 
         self.assertEqual(len(matches), 1)
         self.assertEqual(matches[0]["item"], lost_item)
-        self.assertEqual(matches[0]["score"], 100)

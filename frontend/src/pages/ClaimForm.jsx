@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import "./ClaimForm.css";
+import NavigationButtons from "../components/NavigationButtons";
 
 function ClaimForm() {
   const { itemId } = useParams();
@@ -58,6 +59,7 @@ function ClaimForm() {
   return (
     <div className="claim-form-page">
       <div className="claim-form-container">
+        <NavigationButtons />
         <h1>Claim Ownership</h1>
 
         <p className="claim-form-subtitle">

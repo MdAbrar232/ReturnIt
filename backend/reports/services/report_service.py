@@ -1,21 +1,18 @@
-from reports.models import Category, Item
+from reports.models import Category, Item, Photo
 from notifications.patterns.observer.subject import report_subject
-from reports.patterns.factory.creators import (
-    FoundReportCreator,
-    LostReportCreator,
-)
+from reports.patterns.factory.registry import ReportFactoryRegistry
 
-#Initializing the Factory Pattern for creating lost and found reports
+
+# Initializing the Factory Pattern for creating lost and found reports
 class ReportService:
 
     @staticmethod
     def create_report(user, report_type, data):
-        if report_type == "LOST":
-            creator = LostReportCreator()
-        elif report_type == "FOUND":
-            creator = FoundReportCreator()
-        else:
-            raise ValueError("Invalid report type")
+        creator_class = ReportFactoryRegistry.get_creator(
+            report_type
+        )
+
+        creator = creator_class()
 
         item_data = data.pop("item")
 
@@ -25,7 +22,7 @@ class ReportService:
             id=item_data["category"]
         )
 
-        Item.objects.create(
+        item = Item.objects.create(
             report=report,
             title=item_data["title"],
             description=item_data["description"],
@@ -35,6 +32,14 @@ class ReportService:
             category=category,
         )
 
+        image = item_data.get("image")
+
+        if image:
+            Photo.objects.create(
+                item=item,
+                image=image,
+            )
+
         report_subject.notify_observers(report)
-        
+
         return report

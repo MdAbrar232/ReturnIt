@@ -58,3 +58,12 @@ class ProofVerificationAdapterTest(TestCase):
 
         self.assertTrue(result["verified"])
         self.assertIn("submitted", result["reason"])
+
+    def test_empty_proof_is_rejected(self):
+        self.claim.proof = ""
+        self.claim.save()
+
+        result = self.adapter.verify(self.claim)
+
+        self.assertFalse(result["verified"])
+        self.assertIn("No proof", result["reason"])

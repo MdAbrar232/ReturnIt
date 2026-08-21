@@ -8,6 +8,9 @@ from .permissions import IsAdminUser
 from .serializers import ClaimSerializer
 
 from claims.patterns.adapter.adapters import ProofVerificationAdapter
+from claims.patterns.observer.subject import claim_subject
+
+from notifications.patterns.singleton.logger import Logger
 
 
 class ClaimCreateView(APIView):
@@ -20,6 +23,11 @@ class ClaimCreateView(APIView):
             claim = serializer.save(
                 claimant=request.user,
                 status=Claim.Status.PENDING,
+            )
+
+            Logger().log(
+                f"User {request.user.username} submitted "
+                f"Claim #{claim.id} for Item #{claim.item.id}"
             )
 
             return Response(
@@ -102,6 +110,12 @@ class ClaimCancelView(APIView):
             )
 
         claim.cancel()
+        claim_subject.notify_observers(claim)
+
+        Logger().log(
+            f"User {request.user.username} cancelled "
+            f"Claim #{claim.id} for Item #{claim.item.id}"
+        )
 
         return Response(
             ClaimSerializer(claim).data,
@@ -124,6 +138,7 @@ class AdminClaimListView(APIView):
             serializer.data,
             status=status.HTTP_200_OK,
         )
+
 
 class AdminClaimApproveView(APIView):
     permission_classes = [IsAdminUser]
@@ -161,6 +176,12 @@ class AdminClaimApproveView(APIView):
             )
 
         claim.approve()
+        claim_subject.notify_observers(claim)
+
+        Logger().log(
+            f"Admin {request.user.username} approved "
+            f"Claim #{claim.id} for Item #{claim.item.id}"
+        )
 
         return Response(
             ClaimSerializer(claim).data,
@@ -192,6 +213,12 @@ class AdminClaimRejectView(APIView):
             )
 
         claim.reject()
+        claim_subject.notify_observers(claim)
+
+        Logger().log(
+            f"Admin {request.user.username} rejected "
+            f"Claim #{claim.id} for Item #{claim.item.id}"
+        )
 
         return Response(
             ClaimSerializer(claim).data,

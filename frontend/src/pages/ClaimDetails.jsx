@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import "./ClaimDetails.css";
+import NavigationButtons from "../components/NavigationButtons";
 
 function ClaimDetails() {
   const { claimId } = useParams();
@@ -112,6 +113,7 @@ function ClaimDetails() {
   return (
     <div className="claim-details-page">
       <div className="claim-details-container">
+        <NavigationButtons />
         <div className="claim-details-header">
           <h1>Claim #{claim.id}</h1>
 

@@ -1,16 +1,18 @@
 from abc import ABC, abstractmethod
+
 from reports.services.matching_service import MatchingService
 from notifications.models import Notification
+from notifications.patterns.singleton.logger import Logger
 
 
-class ReportObserver(ABC):  #ObserverInterface
+class ReportObserver(ABC):  # ObserverInterface
 
     @abstractmethod
     def notify(self, report):
         pass
 
 
-class MatchObserver(ReportObserver):  #ConcreteObserver
+class MatchObserver(ReportObserver):  # ConcreteObserver
 
     def notify(self, report):
         if report.type == "FOUND":
@@ -25,16 +27,28 @@ class MatchObserver(ReportObserver):  #ConcreteObserver
 
         return []
 
-class NotificationObserver(ReportObserver): #ConcreteObserver
+
+class NotificationObserver(ReportObserver):  # ConcreteObserver
 
     def notify(self, report):
         Notification.objects.create(
             user=report.user,
-            message=f"Your {report.type} report has been created successfully.",
+            message=(
+                f"Your {report.type} report "
+                f"has been created successfully."
+            ),
         )
 
 
-class ActivityLogObserver(ReportObserver): #ConcreteObserver
+class ActivityLogObserver(ReportObserver):
+    # ConcreteObserver
 
     def notify(self, report):
-        print("ActivityLogObserver: recording report activity.")
+        from notifications.patterns.singleton.logger import Logger
+
+        logger = Logger()
+
+        logger.log(
+            f"User {report.user.username} created "
+            f"Report #{report.id}"
+        )
