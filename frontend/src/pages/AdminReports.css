@@ -1,23 +1,190 @@
 .admin-reports-page {
-  min-height: 100vh;
-  padding: 40px;
-  background: #f5f7fb;
+
+  min-height:100vh;
+
+  padding:50px;
+
+  background:
+  var(--background);
+
 }
+
+
 
 .admin-reports-container {
-  max-width: 900px;
-  margin: auto;
+
+  max-width:1100px;
+
+  margin:auto;
+
 }
+
+
+
+.admin-reports-container h1 {
+
+  font-size:40px;
+
+  margin-bottom:30px;
+
+  font-family:
+  var(--font-heading);
+
+}
+
+
 
 .admin-report-card {
-  background: white;
-  padding: 25px;
-  margin-bottom: 20px;
-  border-radius: 10px;
+
+  background:white;
+
+  padding:30px;
+
+  margin-bottom:25px;
+
+  border-radius:22px;
+
+  box-shadow:
+  var(--shadow);
+
+  transition:.25s;
+
 }
 
+
+
+.admin-report-card:hover {
+
+  transform:
+  translateY(-4px);
+
+}
+
+
+
+.admin-report-card h2 {
+
+  margin-top:0;
+
+  font-size:26px;
+
+}
+
+
+
+.admin-report-card p {
+
+  color:
+  var(--text-muted);
+
+  margin:10px 0;
+
+  line-height:1.5;
+
+}
+
+
+
+.admin-report-card strong {
+
+  color:
+  var(--text);
+
+}
+
+
+
 .admin-report-card button {
-  margin-right: 10px;
-  padding: 10px 15px;
-  cursor: pointer;
+
+
+  margin-right:12px;
+
+
+  margin-top:20px;
+
+
+  padding:12px 18px;
+
+
+  border:none;
+
+
+  border-radius:12px;
+
+
+  background:
+
+  var(--primary);
+
+
+  color:white;
+
+
+  font-weight:600;
+
+
+  cursor:pointer;
+
+
+}
+
+
+
+.admin-report-card button:hover {
+
+  background:
+  var(--accent);
+
+}
+
+
+
+/* Delete button */
+
+.admin-report-card button:last-child {
+
+  background:#DC2626;
+
+}
+
+
+
+.admin-report-card button:last-child:hover {
+
+  background:#B91C1C;
+
+}
+
+
+
+.error {
+
+  color:
+  var(--danger);
+
+  font-weight:600;
+
+}
+
+
+
+@media(max-width:700px){
+
+
+.admin-reports-page{
+
+padding:25px;
+
+}
+
+
+
+.admin-report-card button{
+
+width:100%;
+
+margin-right:0;
+
+}
+
 }

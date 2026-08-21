@@ -1,0 +1,173 @@
+.navbar {
+
+  height: 78px;
+
+  background:
+  var(--primary);
+
+  display:flex;
+
+  align-items:center;
+
+  justify-content:space-between;
+
+  padding:
+  0 42px;
+
+  color:white;
+
+  box-shadow:
+  0 8px 25px rgba(0,0,0,.15);
+
+}
+
+
+
+.navbar-brand {
+
+  display:flex;
+
+  align-items:center;
+
+  gap:14px;
+
+  cursor:pointer;
+
+}
+
+
+
+.navbar-brand img {
+
+  width:58px;
+  height:58px;
+
+  object-fit:contain;
+
+}
+
+
+
+.navbar-brand h2 {
+
+  margin:0;
+
+  color:white;
+
+  font-family:
+  var(--font-heading);
+
+  font-size:24px;
+
+}
+
+
+
+.navbar-brand span {
+
+  font-size:12px;
+
+  color:#dbeafe;
+
+}
+
+
+
+.navbar-links {
+
+  display:flex;
+
+  align-items:center;
+
+  gap:26px;
+
+}
+
+
+
+.navbar-links a {
+
+  color:white;
+
+  font-weight:500;
+
+  transition:.2s;
+
+  position:relative;
+
+}
+
+
+
+.navbar-links a:hover {
+
+  color:
+  var(--accent);
+
+}
+
+
+
+.navbar-links a.active {
+
+  color:
+  var(--accent);
+
+}
+
+
+
+.navbar-links a.active::after {
+
+  content:"";
+
+  position:absolute;
+
+  left:0;
+
+  bottom:-8px;
+
+  width:100%;
+
+  height:2px;
+
+  background:
+  var(--accent);
+
+}
+
+
+
+.navbar-links button {
+
+
+  background:
+  var(--accent);
+
+
+  color:white;
+
+
+  padding:
+  10px 20px;
+
+
+  border-radius:
+  12px;
+
+
+  font-weight:600;
+
+
+  transition:.2s;
+
+}
+
+
+
+.navbar-links button:hover {
+
+  transform:
+  translateY(-2px);
+
+}

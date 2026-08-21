@@ -1,0 +1,195 @@
+.notifications-page {
+
+  min-height:100vh;
+
+  padding:50px;
+
+  background:
+  var(--background);
+
+}
+
+
+
+.notifications-container {
+
+  max-width:900px;
+
+  margin:auto;
+
+}
+
+
+
+.notifications-container h1 {
+
+  font-size:40px;
+
+  margin-bottom:10px;
+
+}
+
+
+
+.notifications-subtitle {
+
+  color:
+  var(--text-muted);
+
+  margin-bottom:35px;
+
+  font-size:17px;
+
+}
+
+
+
+.notifications-list {
+
+  display:flex;
+
+  flex-direction:column;
+
+  gap:18px;
+
+}
+
+
+
+.notification-card {
+
+
+  display:flex;
+
+
+  gap:20px;
+
+
+  align-items:flex-start;
+
+
+  background:white;
+
+
+  padding:25px;
+
+
+  border-radius:20px;
+
+
+  box-shadow:
+
+  var(--shadow);
+
+
+  transition:.25s;
+
+
+}
+
+
+
+.notification-card:hover {
+
+  transform:
+  translateY(-4px);
+
+}
+
+
+
+.notification-icon {
+
+
+  width:45px;
+
+  height:45px;
+
+
+  display:flex;
+
+  align-items:center;
+
+  justify-content:center;
+
+
+  background:#E0F2FE;
+
+
+  border-radius:50%;
+
+
+  font-size:22px;
+
+
+}
+
+
+
+.notification-content p {
+
+  margin:0 0 10px;
+
+  font-size:16px;
+
+  line-height:1.6;
+
+}
+
+
+
+.notification-content small {
+
+  color:
+  var(--text-muted);
+
+}
+
+
+
+.empty-notifications {
+
+
+  background:white;
+
+  padding:40px;
+
+  border-radius:20px;
+
+  text-align:center;
+
+  color:
+  var(--text-muted);
+
+}
+
+
+
+.empty-notifications:first-letter {
+
+  font-size:40px;
+
+}
+
+
+
+.notifications-error {
+
+  color:
+  var(--danger);
+
+  font-weight:600;
+
+}
+
+
+
+@media(max-width:700px){
+
+.notifications-page{
+
+padding:25px;
+
+}
+
+}

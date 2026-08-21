@@ -1,42 +1,162 @@
 .admin-logs-page {
-  min-height: 100vh;
-  padding: 40px 20px;
-  background: #f5f7fb;
+
+  min-height:100vh;
+
+  padding:50px;
+
+  background:
+  var(--background);
+
 }
+
+
 
 .admin-logs-container {
-  max-width: 900px;
-  margin: 0 auto;
+
+  max-width:1000px;
+
+  margin:auto;
+
 }
+
+
 
 .admin-logs-container h1 {
-  margin-bottom: 10px;
+
+  font-size:40px;
+
+  margin-bottom:10px;
+
+  font-family:
+  var(--font-heading);
+
 }
+
+
 
 .admin-logs-subtitle {
-  margin-bottom: 30px;
-  color: #555;
+
+  color:
+  var(--text-muted);
+
+  font-size:17px;
+
+  margin-bottom:35px;
+
 }
+
+
 
 .admin-logs-list {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
+
+  display:flex;
+
+  flex-direction:column;
+
+  gap:18px;
+
 }
+
+
 
 .admin-log-entry {
-  padding: 14px 18px;
-  background: white;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  font-size: 15px;
-  line-height: 1.5;
+
+  position:relative;
+
+
+  padding:25px 30px 25px 60px;
+
+
+  background:white;
+
+
+  border-radius:20px;
+
+
+  box-shadow:
+
+  var(--shadow);
+
+
+  line-height:1.6;
+
+
+  color:
+
+  var(--text);
+
+
+  transition:.25s;
+
+
 }
+
+
+
+.admin-log-entry:hover {
+
+
+  transform:
+
+  translateY(-4px);
+
+
+}
+
+
+
+.admin-log-entry::before {
+
+
+  content:"📋";
+
+
+  position:absolute;
+
+
+  left:20px;
+
+
+  top:24px;
+
+
+  font-size:22px;
+
+
+}
+
+
 
 .admin-logs-error {
-  color: #b00020;
+
+  color:
+
+  var(--danger);
+
+  font-weight:600;
+
 }
 
+
+
 .admin-logs-message {
-  color: #555;
+
+  color:
+
+  var(--text-muted);
+
+}
+
+
+
+@media(max-width:700px){
+
+
+.admin-logs-page{
+
+padding:25px;
+
+}
+
+
 }
