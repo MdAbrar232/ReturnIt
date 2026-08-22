@@ -9,8 +9,10 @@ ReturnIt - University Lost & Found Platform
 Md Abrar Mahbub Fida - 2321355042  
 Rizwan Arif - 2312237042
 
-Sanzida Islam - 2311599042
 Nowshin Tabassum-2321089042
+
+Sanzida Islam - 2311599042
+
 
 ## Project Description
 
